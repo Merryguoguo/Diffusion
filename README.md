@@ -26,7 +26,22 @@ Basic, Pop Diffusion Tech
 
    :wrench: 在实际实现中（比如 Stable Diffusion、DDPM、DDIM），  
    时间嵌入通常是一个可训练的、密集的向量表示，
-   维度与模型中间层的通道数相匹配，以便与图像特征融合
+   维度与模型中间层的通道数相匹配，以便与图像特征融合。
    
-3. **Time Embedding如何注入UNet？**
-4. **Time Embedding注入UNet后，如何调整其对不同时间步的响应？**
+2. **Time Embedding如何注入UNet？**  
+   :dart: **核心思想**
+   > UNet在处理某一时刻的噪声数据时，  
+   > 不仅要看图像本身的内容，还要知道“现在处于扩散过程的哪个时间点t”，   
+   > 从而调整其内部特征表示，以适应不同噪声强度的输入。
+   
+   **Step 1: 时间嵌入生成（基于时间步t）**  
+   > 在推理或训练时，对于每一个时间步t，首先计算或查表得到一个时间嵌入向量（time embedding vector），  
+   > 通常维度为[1, embed_dim]或扩展为[1, embed_dim, 1, 1]以匹配空间维度。
+
+   **Step2: 时间嵌入被注入到UNet的多个层次中**  
+   a. 注入到UNet的每个时空卷积块（如ResNet Block/Downsample/Upsample Block）
+   > 在每个ResBlock（或类似的卷积块）中，除了输入图像特征外，还会将时间嵌入作为额外的条件信息输入
+   > 
+   
+   
+5. **Time Embedding注入UNet后，如何调整其对不同时间步的响应？**
