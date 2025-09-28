@@ -40,11 +40,11 @@ Basic, Pop Diffusion Tech
 
    **Step2: 时间嵌入被注入到UNet的多个层次中**  
    :stars: 注入到UNet的每个时空卷积块（如ResNet Block/Downsample/Upsample Block）
-   > 在每个ResBlock（或类似的卷积块）中，除了输入图像特征外，还会将时间嵌入作为额外的条件信息输入
-   > 具体方式可以是：
-   > a. 通过Time Embedding与图像特征拼接（concat）后送入卷积
-   > b. 通过Time Emdedding先经过一个MLP或Transformer Layer生成一组“时间相关的权重/偏置”，再对图像特征进行调整（如AdaGN, FiLM, TimeMix等机制）
-   > c. 更常见的是：时间嵌入被送入一组“时间嵌入MLP”或“时间卷积”，生成一组与图像通道对齐的调制参数，然后对主路径的特征进行调制（类似条件批归一化/特征变换）
+   > 在每个ResBlock（或类似的卷积块）中，除了输入图像特征外，还会将时间嵌入作为额外的条件信息输入  
+   > 具体方式：  
+   > a. 通过Time Embedding与图像特征拼接（concat）后送入卷积  
+   > b. 通过Time Emdedding先经过一个MLP或Transformer Layer生成一组“时间相关的权重/偏置”，再对图像特征进行调整（如AdaGN, FiLM, TimeMix等机制）  
+   > c. 更常见的是：时间嵌入被送入一组“时间嵌入MLP”或“时间卷积”，生成一组与图像通道对齐的调制参数，然后对主路径的特征进行调制（类似条件批归一化/特征变换）  
    
    :stars: 典型实现：通过Time Emdedding调整 BatchNorm / GroupNorm / AdaGN 等
    > 比如在某些视线中，时间嵌入会用来生成**条件伽马（scale）和beta（shift）参数**，  
