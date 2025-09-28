@@ -13,10 +13,20 @@ Basic, Pop Diffusion Tech
    
    :unlock: 常见嵌入方法：\
    a. 正弦 / 余弦位置编码（类似 Transformer）
-      > 把实践部当作“位置”pos，生成一组正弦/余弦频率特征
+      > 把时间步当作“位置”pos，生成一组正弦/余弦频率特征
+      > PE(pos, 2i) = sin(pos/10000^(2i/d)),
+      > PE(pos, 2i+!) = cos(pos/10000^(2i/d))
       
-   b. 可学习的线性投影（MLP Embedding）\
+   b. 可学习的线性投影（MLP Embedding）
+      > 将t（标量或one-hot）通过一个或多个全连接层映射为高维向量
+      > 更灵活，训练过程中可调整
+      
    c. 组合方式
+      > 通过正弦编码，再通过可学习MLP进一步映射
+
+   :wrench: 在实际实现中（比如 Stable Diffusion、DDPM、DDIM），  
+   时间嵌入通常是一个可训练的、密集的向量表示，
+   维度与模型中间层的通道数相匹配，以便与图像特征融合
    
 3. **Time Embedding如何注入UNet？**
 4. **Time Embedding注入UNet后，如何调整其对不同时间步的响应？**
