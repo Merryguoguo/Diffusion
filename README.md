@@ -79,4 +79,13 @@ Basic, Pop Diffusion Tech
 #### :droplet: 如何在UNet中实现FiLM(Feature-wise Linear Modulation)或AdaGN(Adaptive Group Normalization)等时间条件调制机制？
 > 使模型能够根据时间步（或其他条件）动态调整特征表示  
 
-:bulb: **条件生成模型** （Conditional Generation）中如何将额外信息（如时间步t、文本嵌入、类别标签等）注入到神经网络中，从而控制其输出行为，这在扩散模型（如**Stable Diffusion**）、风格迁移、**可控生成任务**中都有广泛应用。
+:bulb: **条件生成模型** （Conditional Generation）中如何将**额外信息**（如时间步t、文本嵌入、类别标签等）注入到神经网络中，从而控制其输出行为，这在扩散模型（如**Stable Diffusion**）、风格迁移、**可控生成任务**中都有广泛应用。  
+
+> 在扩散模型中，我们希望UNet不仅能处理**图像数据**，  
+> 还能根据当前的**时间步t（或其他条件，如文本、类别）** 动态调整其**内部特征表示**，以适应**不同噪声强度**或**生成目标**。
+
+:green_apple: **条件调制机制**  
+> 将时间嵌入等信息以某种方式融合进UNet的**特征图**中，  
+> 控制特征的缩放（scale）和偏移（shift）(即**特征变换**),  
+> 或者控制**归一化**的行为。  
+
