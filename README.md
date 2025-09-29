@@ -71,5 +71,9 @@ Basic, Pop Diffusion Tech
    > 时间嵌入将时间步t编码为高维向量，  
    > 并注入到UNet的多个层次中（如ResBlock、Normalization层、Attention层等）  
    > 使模型能够感知当前所处的扩散时间步，从而动态调整其特征表示与去噪策略，    
-   > 以适应不同时间步下不同的噪声强度和去噪目标。  
+   > 以适应不同时间步下不同的噪声强度和去噪目标。
+
+
+#### :droplet: 如何在UNet中实现FiLM(Feature-wise Linear Modulation)或AdaGN(Adaptive Group Normalization)等时间条件调制机制？
+> 使模型能够根据时间步（或其他条件）动态调整特征表示
    
