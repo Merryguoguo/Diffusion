@@ -1,8 +1,8 @@
 # Diffusion
 Basic, Pop Diffusion Tech
 
-### :star: Tech Details
-#### :droplet: 将时间嵌入（time emdedding）输入UNet后，UNet是如何调整其对于不同时间步、不同噪声强度的响应的？
+## :star: Tech Details
+### :droplet: 将时间嵌入（time emdedding）输入UNet后，UNet是如何调整其对于不同时间步、不同噪声强度的响应的？
 > 对于Diffusion Models来说，同一个输入图像（或潜在变量）在不同的时间步t看上去是完全不同的（比如，t=1时噪声少，t=T时噪声多），
 > 模型必须知道当前是出于哪个时间步，才能正确地去噪。
 
@@ -76,7 +76,7 @@ Basic, Pop Diffusion Tech
    <img src="https://github.com/Merryguoguo/Diffusion/blob/main/Diffusion1.PNG" width="500px">
 
 
-#### :droplet: 如何在UNet中实现FiLM(Feature-wise Linear Modulation)或AdaGN(Adaptive Group Normalization)等时间条件调制机制？
+### :droplet: 如何在UNet中实现FiLM(Feature-wise Linear Modulation)或AdaGN(Adaptive Group Normalization)等时间条件调制机制？
 > 使模型能够根据时间步（或其他条件）动态调整特征表示  
 
 :bulb: **条件生成模型** （Conditional Generation）中如何将**额外信息**（如时间步t、文本嵌入、类别标签等）注入到神经网络中，从而控制其输出行为，这在扩散模型（如**Stable Diffusion**）、风格迁移、**可控生成任务**中都有广泛应用。  
@@ -84,7 +84,7 @@ Basic, Pop Diffusion Tech
 > 在扩散模型中，我们希望UNet不仅能处理**图像数据**，  
 > 还能根据当前的**时间步t（或其他条件，如文本、类别）** 动态调整其**内部特征表示**，以适应**不同噪声强度**或**生成目标**。
 
-:green_apple: **条件调制机制**  
+#### :green_apple: **条件调制机制**  
 > 将时间嵌入等信息以某种方式融合进UNet的**特征图**中，  
 > 控制特征的缩放（scale）和偏移（shift）(即**特征变换**),  
 > 或者控制**归一化**的行为。  
@@ -132,5 +132,11 @@ Basic, Pop Diffusion Tech
 :arrow_forward: 这样，时间嵌入就通过生成 γ 和 β，控制了该层特征图的“强度”和“偏置”，从而实现了时间条件调制  
 :arrow_forward: 即插即用；  
 :arrow_forward: 轻量；  
-:arrow_forward: 可灵活地扩展到其它条件（如类别、文本嵌入等）  
+:arrow_forward: 可灵活地扩展到其它条件（如类别、文本嵌入等）    
+
+:white_check_mark: 方法二：AdaGN（Adaptive Group Normalization）——**自适应归一化**  
+:dart: **核心思想**  
+> 在Group Normalization（或BatchNorm / InstanceNorm）之后，  
+> 使用条件生成一对参数（ γ 和 β ），   
+> 对该通道的特征进行线性变换：输出 = γ × 特征 + β。  
    
