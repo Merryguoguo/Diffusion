@@ -89,3 +89,48 @@ Basic, Pop Diffusion Tech
 > 控制特征的缩放（scale）和偏移（shift）(即**特征变换**),  
 > 或者控制**归一化**的行为。  
 
+<img src="https://github.com/Merryguoguo/Diffusion/blob/main/Diffusion_%E6%9D%A1%E4%BB%B6%E6%8E%A7%E5%88%B6%E6%9C%BA%E5%88%B6.png" width='500px'>
+
+:white_check_mark: 方法一：FilM（Feature-wise Linear Modulation）——**逐通道**线性调试  
+:dart: **核心思想**  
+> 对于每一个特征图通道，  
+> 使用条件生成一对参数（ γ 和 β ），   
+> 对该通道的特征进行线性变换：输出 = γ × 特征 + β。  
+
+相当于让**条件信息**控制**该通道特征**的“强度”（缩放）和“偏置”（平移）    
+
+:wrench: **实现步骤**（以时间步t为例）  
+1. 输入：  
+   > :milky_way: **特征图**：来自UNet的某个中间层  
+   > :chart_with_upwards_trend: **条件信息**：时间步t —— 通过Embedding得到时间嵌入t_emb（比如通过正弦编码或MLP）
+   
+2. 将时间嵌入映射为调制参数：
+   > 将t_emb通过一个小的MLP（通常是两层全连接），输出形状为：γ, β  
+   > 即：对每一个通道c，生成一个scale γ_c 和一个shift β_c
+   
+   MLP示例：  
+   
+   ```
+   self.mlp = nn.Sequential(
+      nn.Linear(time_emb_dim, time_emb_dim),
+      nn.ReLU(),
+      nn.Linear(time_emb_dim, 2*num_features), # 输出 γ 和 β
+   )
+   gamma_beta = self.mlp(time_emb) # [B, 2C]
+   gamma, beta = torch.chunk(gamma_beta, 2, dim=-1) # 各自【B，C】
+   gamma = gamma.unsqueeze(-1).unsqueeze(-1) # [B, C, 1, 1]
+   beta = beta.unsqueeze(-1).unsqueeze(-1)
+   ```
+4. 应用调制：
+   > 对输入特征图 x，逐通道进行：  
+   > y = γ · x + β  
+
+   ```
+   out = gamma * x + beta
+   ```
+
+:arrow_forward: 这样，时间嵌入就通过生成 γ 和 β，控制了该层特征图的“强度”和“偏置”，从而实现了时间条件调制  
+:arrow_forward: 即插即用；  
+:arrow_forward: 轻量；  
+:arrow_forward: 可灵活地扩展到其它条件（如类别、文本嵌入等）  
+   
