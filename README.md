@@ -73,6 +73,8 @@ Basic, Pop Diffusion Tech
    > 使模型能够感知当前所处的扩散时间步，从而动态调整其特征表示与去噪策略，    
    > 以适应不同时间步下不同的噪声强度和去噪目标。
 
+   <img src="https://github.com/Merryguoguo/Diffusion/blob/main/Diffusion1.PNG" width="500px">
+
 
 #### :droplet: 如何在UNet中实现FiLM(Feature-wise Linear Modulation)或AdaGN(Adaptive Group Normalization)等时间条件调制机制？
 > 使模型能够根据时间步（或其他条件）动态调整特征表示
